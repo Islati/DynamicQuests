@@ -40,7 +40,18 @@ public class QuestGenerator
 			new QuestMaterial(new MaterialData(Material.WOOD_STAIRS),16),
 			new QuestMaterial(new MaterialData(Material.BIRCH_WOOD_STAIRS),16),
 			new QuestMaterial(new MaterialData(Material.JUNGLE_WOOD_STAIRS),16),
-			new QuestMaterial(new MaterialData(Material.SPRUCE_WOOD_STAIRS),16)
+			new QuestMaterial(new MaterialData(Material.SPRUCE_WOOD_STAIRS),16),
+			new QuestMaterial(new MaterialData(Material.COAL_BLOCK),8),
+			new QuestMaterial(new MaterialData(Material.ENDER_STONE),28),
+			new QuestMaterial(new MaterialData(Material.QUARTZ_BLOCK),12)
+	);
+
+	private static List<QuestMaterial> questMaterialItems = Arrays.asList(
+			new QuestMaterial(new MaterialData(Material.COAL), 64),
+			new QuestMaterial(new MaterialData(Material.BLAZE_ROD), 18),
+			new QuestMaterial(new MaterialData(Material.BLAZE_POWDER), 48),
+			new QuestMaterial(new MaterialData(Material.IRON_INGOT),48),
+			new QuestMaterial(new MaterialData(Material.GOLD_INGOT), 48)
 	);
 
 
