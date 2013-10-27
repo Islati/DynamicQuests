@@ -1,42 +1,36 @@
 package com.caved_in.dynamicquests.handlers.dynamicquests.quests;
 
 import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestType;
-import com.caved_in.dynamicquests.handlers.dynamicquests.interfaces.IMaterialQuest;
-import org.bukkit.Material;
-import org.bukkit.material.MaterialData;
+import com.caved_in.dynamicquests.handlers.dynamicquests.quests.interfaces.IMaterialQuest;
+import com.caved_in.dynamicquests.handlers.material.QuestMaterial;
 
 import java.util.UUID;
 
 public class CollectQuest implements IMaterialQuest
 {
-	private UUID eventID;
-	private int eventBeginNpc = 0;
-	private int deliveryNpc = 0;
-	private MaterialData eventMaterial = new MaterialData(Material.AIR);
-	private int materialAmount = 1;
+	private UUID eventID; //Unique Quest ID
+
+	private int questBeginNpc = 0; //Quest begin NPC
+	private int deliveryNpc = 0; //Npc to deliver items to
+
+	private QuestMaterial questMaterial; //Material(s) required for this quest
 
 	public CollectQuest(UUID eventID)
 	{
 		this.eventID = eventID;
 	}
 
-	public CollectQuest(UUID eventID, int eventBeginNpc, int deliveryNpc)
+	public CollectQuest(UUID eventID, int questBeginNpc)
 	{
-		this.eventBeginNpc = eventBeginNpc;
-		this.deliveryNpc = deliveryNpc;
+		this.questBeginNpc = questBeginNpc;
+		this.deliveryNpc = questBeginNpc;
 		this.eventID = eventID;
 	}
 
 	@Override
-	public MaterialData getEventMaterial()
+	public QuestMaterial getQuestMaterial()
 	{
-		return this.eventMaterial;
-	}
-
-	@Override
-	public int getEventMaterialAmount()
-	{
-		return this.materialAmount;
+		return this.questMaterial;
 	}
 
 	@Override
@@ -52,32 +46,26 @@ public class CollectQuest implements IMaterialQuest
 	}
 
 	@Override
-	public void setEventMaterialAmount(int eventMaterialAmount)
+	public void setQuestMaterial(QuestMaterial questMaterial)
 	{
-		this.materialAmount = eventMaterialAmount;
+		this.questMaterial = questMaterial;
 	}
 
 	@Override
-	public void setEventMaterial(MaterialData material)
-	{
-		this.eventMaterial = material;
-	}
-
-	@Override
-	public UUID getEventID()
+	public UUID getQuestID()
 	{
 		return this.eventID;
 	}
 
 	@Override
-	public DynamicQuestType getEventType()
+	public DynamicQuestType getQuestType()
 	{
 		return DynamicQuestType.GATHER_MATERIAL;
 	}
 
 	@Override
-	public int getEventNpc()
+	public int getQuestBeginNpc()
 	{
-		return this.deliveryNpc;
+		return this.questBeginNpc;
 	}
 }

@@ -3,6 +3,7 @@ package com.caved_in.dynamicquests.handlers.dynamicquests;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.DeliverQuest;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobKillQuest;
+import net.citizensnpcs.api.npc.NPC;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,26 @@ public class DynamicQuestHandler
 	private static Map<UUID, DeliverQuest> activeDeliveryQuests = new HashMap<UUID, DeliverQuest>();
 	private static Map<UUID, MobKillQuest> activeMobKillQuests = new HashMap<UUID, MobKillQuest>();
 	private static Map<UUID, CollectQuest> activeCollectQuests = new HashMap<UUID, CollectQuest>();
+	private static Map<Integer, UUID> questsAssigned = new HashMap<>();
+
+	public static boolean isNpcInUse(int npcID)
+	{
+		return questsAssigned.containsKey(npcID);
+	}
+
+	public static UUID getQuestIDForNPC(int npcID)
+	{
+		if (isNpcInUse(npcID))
+		{
+			return questsAssigned.get(npcID);
+		}
+		return null;
+	}
+
+	public static UUID getQuestIDForNPC(NPC npc)
+	{
+		return getQuestIDForNPC(npc.getId());
+	}
 
 	public static DynamicQuestType getQuestType(UUID questID)
 	{
@@ -80,19 +101,22 @@ public class DynamicQuestHandler
 
 	public static void addDeliverQuest(DeliverQuest deliverQuest)
 	{
-		activeQuestTypes.put(deliverQuest.getEventID(),deliverQuest.getEventType());
-		activeDeliveryQuests.put(deliverQuest.getEventID(), deliverQuest);
+		activeQuestTypes.put(deliverQuest.getQuestID(),deliverQuest.getQuestType());
+		activeDeliveryQuests.put(deliverQuest.getQuestID(), deliverQuest);
+		questsAssigned.put(deliverQuest.getQuestBeginNpc(),deliverQuest.getQuestID());
 	}
 
 	public static void addMobKillQuest(MobKillQuest killQuest)
 	{
-		activeQuestTypes.put(killQuest.getEventID(),killQuest.getEventType());
-		activeMobKillQuests.put(killQuest.getEventID(),killQuest);
+		activeQuestTypes.put(killQuest.getQuestID(),killQuest.getQuestType());
+		activeMobKillQuests.put(killQuest.getQuestID(),killQuest);
+		questsAssigned.put(killQuest.getQuestBeginNpc(), killQuest.getQuestID());
 	}
 
 	public static void addCollectQuest(CollectQuest collectQuest)
 	{
-		activeQuestTypes.put(collectQuest.getEventID(), collectQuest.getEventType());
-		activeCollectQuests.put(collectQuest.getEventID(), collectQuest);
+		activeQuestTypes.put(collectQuest.getQuestID(), collectQuest.getQuestType());
+		activeCollectQuests.put(collectQuest.getQuestID(), collectQuest);
+		questsAssigned.put(collectQuest.getQuestBeginNpc(), collectQuest.getQuestID());
 	}
 }

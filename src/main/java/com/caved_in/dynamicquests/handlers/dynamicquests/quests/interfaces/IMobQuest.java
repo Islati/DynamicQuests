@@ -1,4 +1,4 @@
-package com.caved_in.dynamicquests.handlers.dynamicquests.interfaces;
+package com.caved_in.dynamicquests.handlers.dynamicquests.quests.interfaces;
 
 import com.caved_in.dynamicquests.handlers.entity.QuestEntityWrapper;
 import org.bukkit.Location;
