@@ -1,7 +1,12 @@
 package com.caved_in.dynamicquests.handlers.player;
 
+import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestHandler;
+import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestType;
+import com.caved_in.dynamicquests.handlers.dynamicquests.quests.CollectQuest;
+import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobKillQuest;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.QuestProgress;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.interfaces.*;
+import org.bukkit.entity.EntityType;
 
 import java.util.*;
 
@@ -59,12 +64,22 @@ public class QuestPlayer
 		}
 	}
 
+	public void removeQuest(UUID questID)
+	{
+		if (isPlayerOnQuest(questID))
+		{
+			activeQuestsProgress.remove(questID);
+		}
+	}
+
 	public void removeQuest(IDynamicQuest dynamicQuest)
 	{
-		if (isPlayerOnQuest(dynamicQuest))
-		{
-			activeQuestsProgress.remove(dynamicQuest.getQuestID());
-		}
+		removeQuest(dynamicQuest.getQuestID());
+	}
+
+	public List<UUID> getQuestIds()
+	{
+		return new ArrayList<UUID>(activeQuestsProgress.keySet());
 	}
 
 	/**
@@ -74,5 +89,87 @@ public class QuestPlayer
 	public String getPlayerName()
 	{
 		return playerName;
+	}
+
+	/**
+	 * Get a list of all the active Mob kill quests the player is on
+	 * @return
+	 */
+	public List<MobKillQuest> getActiveMobKillQuests()
+	{
+		List<MobKillQuest> mobKillQuests = new ArrayList<>();
+		for(UUID questID : getQuestIds())
+		{
+			if (DynamicQuestHandler.getQuestType(questID) == DynamicQuestType.KILL_MOB)
+			{
+				mobKillQuests.add(DynamicQuestHandler.getMobKillQuest(questID));
+			}
+		}
+		return mobKillQuests;
+	}
+
+	/**
+	 * Get a list of the active mob kill quests a player is on with the specified type
+	 * @param entityType
+	 * @return
+	 */
+	public List<MobKillQuest> getActiveMobKillQuests(EntityType entityType)
+	{
+		List<MobKillQuest> mobKillQuests = new ArrayList<>();
+		for(UUID questID : getQuestIds())
+		{
+			if (DynamicQuestHandler.getQuestType(questID) == DynamicQuestType.KILL_MOB)
+			{
+				MobKillQuest mobKillQuest = DynamicQuestHandler.getMobKillQuest(questID);
+				if (mobKillQuest.getEntityData().getEntityType() == entityType)
+				{
+					mobKillQuests.add(DynamicQuestHandler.getMobKillQuest(questID));
+				}
+			}
+		}
+		return mobKillQuests;
+	}
+
+	/**
+	 * Get a collection of the active CollectQuests a player is embarked on
+	 * @return
+	 */
+	public List<CollectQuest> getActiveCollectionQuests()
+	{
+		List<CollectQuest> collectQuests = new ArrayList<>();
+		for(UUID questID : getQuestIds())
+		{
+			if (DynamicQuestHandler.getQuestType(questID) == DynamicQuestType.GATHER_MATERIAL)
+			{
+				collectQuests.add(DynamicQuestHandler.getCollectQuest(questID));
+			}
+		}
+		return collectQuests;
+	}
+
+	/**
+	 * Get the players progress in the given quest
+	 * @param questID
+	 * @return
+	 */
+	public QuestProgress getQuestProgress(UUID questID)
+	{
+		if (isPlayerOnQuest(questID))
+		{
+			return activeQuestsProgress.get(questID);
+		}
+		return null;
+	}
+
+	/**
+	 * Update a players quest progress to whatever's in the given quest progress
+	 * @param questProgress
+	 */
+	public void updateQuestProgress(QuestProgress questProgress)
+	{
+		if (isPlayerOnQuest(questProgress.getQuestID()))
+		{
+			activeQuestsProgress.put(questProgress.getQuestID(),questProgress);
+		}
 	}
 }

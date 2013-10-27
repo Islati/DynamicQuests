@@ -7,11 +7,9 @@ import java.util.List;
 
 public interface IMobQuest extends IDynamicQuest
 {
-	public List<QuestEntityWrapper> getEntityData();
+	public QuestEntityWrapper getEntityData();
 
-	public void setEntityWrappers(List<QuestEntityWrapper> entityWrappers);
-
-	public void addEntityWrapper(QuestEntityWrapper entityData);
+	public void setEntityWrapper(QuestEntityWrapper entityWrapper);
 
 	public boolean isLocationSpecific();
 

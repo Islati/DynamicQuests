@@ -1,5 +1,6 @@
 name: DynamicQuests
-main: com.caved_in.dyanmicquests.DynamicQuests
+main: com.caved_in.dynamicquests.DynamicQuests
 version: 1.0
 description: The Dynamic Quest-Generation system for Total War
 author: Brandon aka TheGamersCave
+depend: [Citizens]

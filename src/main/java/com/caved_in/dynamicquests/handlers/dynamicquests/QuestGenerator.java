@@ -229,14 +229,14 @@ public class QuestGenerator
 	public static MobKillQuest generateMobKillQuest(int questHolderNPC)
 	{
 		MobKillQuest mobKillQuest = new MobKillQuest(UUID.randomUUID(), questHolderNPC);
-		mobKillQuest.addEntityWrapper(getRandomQuestEntity(MobQuestTier.EASY));
+		mobKillQuest.setEntityWrapper(getRandomQuestEntity(MobQuestTier.EASY));
 		return mobKillQuest;
 	}
 
 	public static MobKillQuest generateMobKillQuest(int questHolderNPC, MobQuestTier questTier)
 	{
 		MobKillQuest mobKillQuest = new MobKillQuest(UUID.randomUUID(), questHolderNPC);
-		mobKillQuest.addEntityWrapper(getRandomQuestEntity(questTier));
+		mobKillQuest.setEntityWrapper(getRandomQuestEntity(questTier));
 		return mobKillQuest;
 	}
 }

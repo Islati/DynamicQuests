@@ -3,11 +3,14 @@ package com.caved_in.dynamicquests.handlers.dynamicquests;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.DeliverQuest;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobKillQuest;
+import com.caved_in.dynamicquests.handlers.material.QuestItemRequirementWrapper;
+import com.caved_in.dynamicquests.handlers.material.QuestMaterial;
 import net.citizensnpcs.api.npc.NPC;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class DynamicQuestHandler
 {
@@ -118,5 +121,98 @@ public class DynamicQuestHandler
 		activeQuestTypes.put(collectQuest.getQuestID(), collectQuest.getQuestType());
 		activeCollectQuests.put(collectQuest.getQuestID(), collectQuest);
 		questsAssigned.put(collectQuest.getQuestBeginNpc(), collectQuest.getQuestID());
+	}
+
+	/**
+	 * Take all the required items from the player, and return any remaining items
+	 * If and <b>ONLY</b> if they have the required amount
+	 * @param questItemsWrapper
+	 * @param player
+	 */
+	public static void removeQuestItems(QuestItemRequirementWrapper questItemsWrapper, Player player)
+	{
+		if (questItemsWrapper.hasRequiredAmount())
+		{
+			for(Map.Entry<Integer,? extends ItemStack> itemStacks : questItemsWrapper.getItemSlots().entrySet())
+			{
+				player.getInventory().setItem(itemStacks.getKey(),null);
+			}
+
+			if (questItemsWrapper.getRemainderItems() > 0)
+			{
+				ItemStack itemStack = questItemsWrapper.getMaterialData().toItemStack(questItemsWrapper.getRemainderItems());
+				player.getInventory().addItem(itemStack);
+			}
+			player.updateInventory();
+		}
+		else
+		{
+			player.sendMessage("YOU NO HAS ITEMS, GTFO BEECH");
+		}
+	}
+
+	/**
+	 * Get a requirements wrapper which holds the players data, if they have the items
+	 * where the items are in their inventory, along with a remainder to put back if they have over the required
+	 * amount in their inventory
+	 * @param questID
+	 * @param player
+	 * @return
+	 */
+	public static QuestItemRequirementWrapper hasRequiredMaterials(UUID questID, Player player)
+	{
+		DynamicQuestType questType = getQuestType(questID);
+		QuestItemRequirementWrapper questRequirementWrapper = null;
+		if (questType == DynamicQuestType.DELIVER_GOODS || questType == DynamicQuestType.GATHER_MATERIAL)
+		{
+			QuestMaterial questWrapper = null; //Give it a null value to be safe
+			//Get the materials required for the quest
+			switch (questType)
+			{
+				case DELIVER_GOODS:
+					questWrapper = getDeliverQuest(questID).getQuestMaterial();
+					break;
+				case GATHER_MATERIAL:
+					questWrapper = getCollectQuest(questID).getQuestMaterial();
+					break;
+				default:
+					break;
+			}
+
+			//Make sure we have the materials
+			if (questWrapper != null)
+			{
+				int playerMaterialAmount = 0; //How many of the required items the player has
+				int itemRemainder = 0; //How many, if any, we should give back
+				int questRequiredAmount = questWrapper.getQuestMaterialAmount(); //The amount of items required by the quest
+				MaterialData questMaterial = questWrapper.getQuestMaterial(); //The material required by the quest
+
+				Map<Integer, ? extends ItemStack> playerItems = player.getInventory().all(questMaterial.getItemType()); //Get all the items in the players inventory required by the quest
+
+				Map<Integer, ItemStack> itemStacksToRemove = new HashMap<>(); //Map of ONLY the items we want to pass to the requirements wrapper
+
+
+				for(Map.Entry<Integer, ? extends ItemStack> inventoryItem : playerItems.entrySet())
+				{
+					ItemStack itemStack = inventoryItem.getValue(); //Get the actual itemstack
+					if (playerMaterialAmount < questRequiredAmount) //If they don't already have the required materials
+					{
+						if ((byte)itemStack.getDurability() == questMaterial.getData()) //Check the durability on the item
+						{
+							playerMaterialAmount += itemStack.getAmount();
+							itemStacksToRemove.put(inventoryItem.getKey(),inventoryItem.getValue());
+						}
+					}
+					else
+					{
+						itemRemainder = (playerMaterialAmount > questRequiredAmount ? playerMaterialAmount - questRequiredAmount : 0); //Set the item remainder incase we need to give items back to the player
+						break;
+					}
+					questRequirementWrapper = new QuestItemRequirementWrapper(playerMaterialAmount,questRequiredAmount,itemStacksToRemove,questMaterial);
+					questRequirementWrapper.setRemainderItems(itemRemainder);
+				}
+			}
+		}
+		return questRequirementWrapper;
 	}
 }
