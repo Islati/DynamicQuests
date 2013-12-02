@@ -6,8 +6,7 @@ import com.caved_in.dynamicquests.handlers.material.QuestMaterial;
 
 import java.util.UUID;
 
-public class CollectQuest implements IMaterialQuest
-{
+public class CollectQuest implements IMaterialQuest {
 	private UUID eventID; //Unique Quest ID
 
 	private int questBeginNpc = 0; //Quest begin NPC
@@ -15,57 +14,48 @@ public class CollectQuest implements IMaterialQuest
 
 	private QuestMaterial questMaterial; //Material(s) required for this quest
 
-	public CollectQuest(UUID eventID)
-	{
+	public CollectQuest(UUID eventID) {
 		this.eventID = eventID;
 	}
 
-	public CollectQuest(UUID eventID, int questBeginNpc)
-	{
+	public CollectQuest(UUID eventID, int questBeginNpc) {
 		this.questBeginNpc = questBeginNpc;
 		this.deliveryNpc = questBeginNpc;
 		this.eventID = eventID;
 	}
 
 	@Override
-	public QuestMaterial getQuestMaterial()
-	{
+	public QuestMaterial getQuestMaterial() {
 		return this.questMaterial;
 	}
 
 	@Override
-	public int getDeliveryNpcId()
-	{
+	public int getDeliveryNpcId() {
 		return this.deliveryNpc;
 	}
 
 	@Override
-	public void setDeliveryNpc(int deliveryNpc)
-	{
+	public void setDeliveryNpc(int deliveryNpc) {
 		this.deliveryNpc = deliveryNpc;
 	}
 
 	@Override
-	public void setQuestMaterial(QuestMaterial questMaterial)
-	{
+	public void setQuestMaterial(QuestMaterial questMaterial) {
 		this.questMaterial = questMaterial;
 	}
 
 	@Override
-	public UUID getQuestID()
-	{
+	public UUID getQuestID() {
 		return this.eventID;
 	}
 
 	@Override
-	public DynamicQuestType getQuestType()
-	{
+	public DynamicQuestType getQuestType() {
 		return DynamicQuestType.GATHER_MATERIAL;
 	}
 
 	@Override
-	public int getQuestBeginNpc()
-	{
+	public int getQuestBeginNpc() {
 		return this.questBeginNpc;
 	}
 }

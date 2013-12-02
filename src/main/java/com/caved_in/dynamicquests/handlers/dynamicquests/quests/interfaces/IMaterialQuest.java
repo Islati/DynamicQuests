@@ -2,8 +2,7 @@ package com.caved_in.dynamicquests.handlers.dynamicquests.quests.interfaces;
 
 import com.caved_in.dynamicquests.handlers.material.QuestMaterial;
 
-public interface IMaterialQuest extends IDynamicQuest
-{
+public interface IMaterialQuest extends IDynamicQuest {
 
 	public QuestMaterial getQuestMaterial();
 

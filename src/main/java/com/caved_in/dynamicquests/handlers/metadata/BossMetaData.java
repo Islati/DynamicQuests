@@ -6,27 +6,22 @@ import org.bukkit.metadata.Metadatable;
 
 import java.util.List;
 
-public class BossMetaData implements QuestMetadata
-{
+public class BossMetaData implements QuestMetadata {
 	@Override
-	public String getKey()
-	{
+	public String getKey() {
 		return "BossEntity";
 	}
 
 	@Override
-	public Object getValue(Metadatable entity)
-	{
+	public Object getValue(Metadatable entity) {
 		List<MetadataValue> entityMetaData = entity.getMetadata(getKey());
-		for(MetadataValue metaValue : entityMetaData)
-		{
+		for (MetadataValue metaValue : entityMetaData) {
 			return metaValue.asString();
 		}
 		return null;
 	}
 
-	public String getBossType(Entity entity)
-	{
+	public String getBossType(Entity entity) {
 		return String.valueOf(getValue(entity));
 	}
 }

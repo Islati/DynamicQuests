@@ -19,197 +19,152 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class CommonUtils
-{
+public class CommonUtils {
 	private static Map<String, ChatColor> prevColours = new HashMap<String, ChatColor>();
 
 	private static boolean colouredConsole = true;
 
 	private static final Pattern colourPat = Pattern.compile("(?<!&)&(?=[0-9a-fA-Fk-oK-OrR])");
 
-	public static void init(Plugin plugin)
-	{
+	public static void init(Plugin plugin) {
 	}
 
-	public static void setColouredConsole(boolean coloured)
-	{
+	public static void setColouredConsole(boolean coloured) {
 		colouredConsole = coloured;
 	}
 
-	public static void MessageAllPlayers(String Message)
-	{
-		for (org.bukkit.entity.Player Player : Bukkit.getOnlinePlayers())
-		{
+	public static void MessageAllPlayers(String Message) {
+		for (org.bukkit.entity.Player Player : Bukkit.getOnlinePlayers()) {
 			Player.sendMessage(Message);
 		}
 	}
 
-	public static void MessageAllPlayers(String[] Messages)
-	{
-		for (org.bukkit.entity.Player Player : Bukkit.getOnlinePlayers())
-		{
-			for (String Message : Messages)
-			{
+	public static void MessageAllPlayers(String[] Messages) {
+		for (org.bukkit.entity.Player Player : Bukkit.getOnlinePlayers()) {
+			for (String Message : Messages) {
 				Player.sendMessage(Message);
 			}
 		}
 	}
 
-	public static void errorMessage(CommandSender sender, String string)
-	{
+	public static void errorMessage(CommandSender sender, String string) {
 		setPrevColour(sender.getName(), ChatColor.RED);
 		message(sender, ChatColor.RED + string, Level.WARNING);
 	}
 
-	public static void statusMessage(CommandSender sender, String string)
-	{
+	public static void statusMessage(CommandSender sender, String string) {
 		setPrevColour(sender.getName(), ChatColor.AQUA);
 		message(sender, ChatColor.AQUA + string, Level.INFO);
 	}
 
-	public static void alertMessage(CommandSender sender, String string)
-	{
+	public static void alertMessage(CommandSender sender, String string) {
 		setPrevColour(sender.getName(), ChatColor.YELLOW);
 		message(sender, ChatColor.YELLOW + string, Level.INFO);
 	}
 
-	public static void generalMessage(CommandSender sender, String string)
-	{
+	public static void generalMessage(CommandSender sender, String string) {
 		setPrevColour(sender.getName(), ChatColor.WHITE);
 		message(sender, string, Level.INFO);
 	}
 
-	public static void broadcastMessage(String string)
-	{
+	public static void broadcastMessage(String string) {
 		CommandSender sender = Bukkit.getConsoleSender();
 		setPrevColour(sender.getName(), ChatColor.YELLOW);
 		Bukkit.getServer().broadcastMessage(parseColourSpec(sender, "&4::&-" + string));
 	}
 
-	private static void setPrevColour(String name, ChatColor colour)
-	{
+	private static void setPrevColour(String name, ChatColor colour) {
 		prevColours.put(name, colour);
 	}
 
-	private static ChatColor getPrevColour(String name)
-	{
-		if (!prevColours.containsKey(name))
-		{
+	private static ChatColor getPrevColour(String name) {
+		if (!prevColours.containsKey(name)) {
 			setPrevColour(name, ChatColor.WHITE);
 		}
 		return prevColours.get(name);
 	}
 
-	public static void rawMessage(CommandSender sender, String string)
-	{
+	public static void rawMessage(CommandSender sender, String string) {
 		boolean strip = ((sender instanceof ConsoleCommandSender)) && (!colouredConsole);
-		for (String line : string.split("\\n"))
-		{
-			if (strip)
-			{
+		for (String line : string.split("\\n")) {
+			if (strip) {
 				sender.sendMessage(ChatColor.stripColor(line));
-			}
-			else
-			{
+			} else {
 				sender.sendMessage(line);
 			}
 		}
 	}
 
-	private static void message(CommandSender sender, String string, Level level)
-	{
+	private static void message(CommandSender sender, String string, Level level) {
 		boolean strip = ((sender instanceof ConsoleCommandSender)) && (!colouredConsole);
-		for (String line : string.split("\\n"))
-		{
-			if (strip)
-			{
+		for (String line : string.split("\\n")) {
+			if (strip) {
 				//LogUtils.log(level, ChatColor.stripColor(parseColourSpec(sender, line)));
-			}
-			else
-			{
+			} else {
 				sender.sendMessage(parseColourSpec(sender, line));
 			}
 		}
 	}
 
-	public static String formatLocation(Location loc)
-	{
-		return String.format("%d,%d,%d,%s", new Object[] { Integer.valueOf(loc.getBlockX()), Integer.valueOf(loc.getBlockY()), Integer.valueOf(loc.getBlockZ()), loc.getWorld().getName() });
+	public static String formatLocation(Location loc) {
+		return String.format("%d,%d,%d,%s", new Object[]{Integer.valueOf(loc.getBlockX()),
+				Integer.valueOf(loc.getBlockY()), Integer.valueOf(loc.getBlockZ()), loc.getWorld().getName()});
 	}
 
-	public static Location parseLocation(String arglist)
-	{
+	public static Location parseLocation(String arglist) {
 		return parseLocation(arglist, null);
 	}
 
-	public static Location parseLocation(String arglist, CommandSender sender)
-	{
+	public static Location parseLocation(String arglist, CommandSender sender) {
 		String s = (sender instanceof Player) ? "" : ",worldname";
 		String[] args = arglist.split(",");
-		try
-		{
+		try {
 			int x = Integer.parseInt(args[0]);
 			int y = Integer.parseInt(args[1]);
 			int z = Integer.parseInt(args[2]);
 			World w = (sender instanceof Player) ? findWorld(args[3]) : ((Player) sender).getWorld();
 			return new Location(w, x, y, z);
-		}
-		catch (ArrayIndexOutOfBoundsException e)
-		{
+		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new IllegalArgumentException("You must specify all of x,y,z" + s + ".");
-		}
-		catch (NumberFormatException e)
-		{
+		} catch (NumberFormatException e) {
 		}
 		throw new IllegalArgumentException("Invalid number in " + arglist);
 	}
 
-	public static String parseColourSpec(String spec)
-	{
+	public static String parseColourSpec(String spec) {
 		return parseColourSpec(null, spec);
 	}
 
-	public static String parseColourSpec(CommandSender sender, String spec)
-	{
+	public static String parseColourSpec(CommandSender sender, String spec) {
 		String who = sender == null ? "*" : sender.getName();
 		String res = colourPat.matcher(spec).replaceAll("�");
 		return res.replace("&-", getPrevColour(who).toString()).replace("&&", "&");
 	}
 
-	public static String unParseColourSpec(String spec)
-	{
+	public static String unParseColourSpec(String spec) {
 		return spec.replaceAll("�", "&");
 	}
 
-	public static World findWorld(String worldName)
-	{
+	public static World findWorld(String worldName) {
 		World w = Bukkit.getServer().getWorld(worldName);
-		if (w != null)
-		{
+		if (w != null) {
 			return w;
 		}
 		throw new IllegalArgumentException("World " + worldName + " was not found on the server.");
 	}
 
-	public static List<String> splitQuotedString(String s)
-	{
+	public static List<String> splitQuotedString(String s) {
 		List<String> matchList = new ArrayList();
 
 		Pattern regex = Pattern.compile("[^\\s\"']+|\"([^\"]*)\"|'([^']*)'");
 		Matcher regexMatcher = regex.matcher(s);
 
-		while (regexMatcher.find())
-		{
-			if (regexMatcher.group(1) != null)
-			{
+		while (regexMatcher.find()) {
+			if (regexMatcher.group(1) != null) {
 				matchList.add(regexMatcher.group(1));
-			}
-			else if (regexMatcher.group(2) != null)
-			{
+			} else if (regexMatcher.group(2) != null) {
 				matchList.add(regexMatcher.group(2));
-			}
-			else
-			{
+			} else {
 				matchList.add(regexMatcher.group());
 			}
 		}
@@ -217,24 +172,20 @@ public class CommonUtils
 		return matchList;
 	}
 
-	public static <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c)
-	{
+	public static <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
 		List list = new ArrayList(c);
 		Collections.sort(list);
 		return list;
 	}
 
-	public static String[] listFilesinJAR(File jarFile, String path, String ext) throws IOException
-	{
+	public static String[] listFilesinJAR(File jarFile, String path, String ext) throws IOException {
 		ZipInputStream zip = new ZipInputStream(new FileInputStream(jarFile));
 		ZipEntry ze = null;
 
 		List<String> list = new ArrayList<String>();
-		while ((ze = zip.getNextEntry()) != null)
-		{
+		while ((ze = zip.getNextEntry()) != null) {
 			String entryName = ze.getName();
-			if ((entryName.startsWith(path)) && (ext != null) && (entryName.endsWith(ext)))
-			{
+			if ((entryName.startsWith(path)) && (ext != null) && (entryName.endsWith(ext))) {
 				list.add(entryName);
 			}
 		}
@@ -243,15 +194,13 @@ public class CommonUtils
 		return list.toArray(new String[list.size()]);
 	}
 
-	public static YamlConfiguration loadYamlUTF8(File file) throws InvalidConfigurationException, IOException
-	{
+	public static YamlConfiguration loadYamlUTF8(File file) throws InvalidConfigurationException, IOException {
 		StringBuilder sb = new StringBuilder((int) file.length());
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 		char[] buf = new char[1024];
 		int l;
-		while ((l = in.read(buf, 0, buf.length)) > -1)
-		{
+		while ((l = in.read(buf, 0, buf.length)) > -1) {
 			sb = sb.append(buf, 0, l);
 		}
 		in.close();
@@ -262,13 +211,11 @@ public class CommonUtils
 		return yaml;
 	}
 
-	public static boolean PercentCheck(double Percent)
-	{
+	public static boolean PercentCheck(double Percent) {
 		return new Random().nextInt(101) <= Percent;
 	}
 
-	public static void messageCosole(String message)
-	{
+	public static void messageCosole(String message) {
 		Bukkit.getConsoleSender().sendMessage(StringUtil.formatColorCodes(message));
 	}
 }

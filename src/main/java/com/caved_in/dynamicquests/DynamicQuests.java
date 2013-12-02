@@ -8,33 +8,27 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DynamicQuests extends JavaPlugin
-{
+public class DynamicQuests extends JavaPlugin {
 	@Override
-	public void onEnable()
-	{
+	public void onEnable() {
 		traitRegister(); //Register the NPC traits for this plugin;
 		registerListeners(); //Register the listeners for this plugin
 	}
 
-	private void traitRegister()
-	{
+	private void traitRegister() {
 		CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(QuestNPC.class).withName("questnpc"));
 	}
 
-	private void registerListeners()
-	{
+	private void registerListeners() {
 		new EntityListeners(this);
 	}
 
 	@Override
-	public void onDisable()
-	{
+	public void onDisable() {
 		HandlerList.unregisterAll(this);
 	}
 
-	public static DynamicQuests getDynamicEventPlugin()
-	{
+	public static DynamicQuests getDynamicEventPlugin() {
 		return (DynamicQuests) Bukkit.getPluginManager().getPlugin("DynamicEvents");
 	}
 }

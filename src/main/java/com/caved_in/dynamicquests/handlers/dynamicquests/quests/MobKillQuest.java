@@ -4,12 +4,10 @@ import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestType;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.interfaces.IMobQuest;
 import com.caved_in.dynamicquests.handlers.entity.QuestEntityWrapper;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 
-import java.util.*;
+import java.util.UUID;
 
-public class MobKillQuest implements IMobQuest
-{
+public class MobKillQuest implements IMobQuest {
 	private UUID eventID;
 	private int eventBeginNpc = 0;
 	private int eventFinishNpc = 0;
@@ -18,20 +16,17 @@ public class MobKillQuest implements IMobQuest
 	private double mobKillRadius = 0.0;
 	private boolean isLocationSpecific = false;
 
-	public MobKillQuest(UUID eventID)
-	{
+	public MobKillQuest(UUID eventID) {
 		this.eventID = eventID;
 	}
 
-	public MobKillQuest(UUID eventID, int eventBeginNpc)
-	{
+	public MobKillQuest(UUID eventID, int eventBeginNpc) {
 		this.eventID = eventID;
 		this.eventBeginNpc = eventBeginNpc;
 		this.eventFinishNpc = eventBeginNpc;
 	}
 
-	public MobKillQuest(UUID eventID, int eventBeginNpc, Location killLocation, double killRadius)
-	{
+	public MobKillQuest(UUID eventID, int eventBeginNpc, Location killLocation, double killRadius) {
 		this.eventID = eventID;
 		this.eventBeginNpc = eventBeginNpc;
 		this.eventFinishNpc = eventBeginNpc;
@@ -40,56 +35,47 @@ public class MobKillQuest implements IMobQuest
 	}
 
 	@Override
-	public Location getKillLocation()
-	{
+	public Location getKillLocation() {
 		return this.mobLocationCenter;
 	}
 
 	@Override
-	public double getKillLocationRadius()
-	{
+	public double getKillLocationRadius() {
 		return this.mobKillRadius;
 	}
 
 	@Override
-	public int getEventFinishNpcID()
-	{
+	public int getEventFinishNpcID() {
 		return this.eventFinishNpc;
 	}
 
 	@Override
-	public UUID getQuestID()
-	{
+	public UUID getQuestID() {
 		return this.eventID;
 	}
 
 	@Override
-	public DynamicQuestType getQuestType()
-	{
+	public DynamicQuestType getQuestType() {
 		return DynamicQuestType.KILL_MOB;
 	}
 
 	@Override
-	public int getQuestBeginNpc()
-	{
+	public int getQuestBeginNpc() {
 		return this.eventBeginNpc;
 	}
 
 	@Override
-	public QuestEntityWrapper getEntityData()
-	{
+	public QuestEntityWrapper getEntityData() {
 		return this.entityWrapper;
 	}
 
 	@Override
-	public void setEntityWrapper(QuestEntityWrapper entityWrapper)
-	{
+	public void setEntityWrapper(QuestEntityWrapper entityWrapper) {
 		this.entityWrapper = entityWrapper;
 	}
 
 	@Override
-	public boolean isLocationSpecific()
-	{
+	public boolean isLocationSpecific() {
 		return this.isLocationSpecific;
 	}
 }
