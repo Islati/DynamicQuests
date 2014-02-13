@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
 public class DynamicQuests extends JavaPlugin {
 	private static DynamicQuests dynamicQuests = null;
 

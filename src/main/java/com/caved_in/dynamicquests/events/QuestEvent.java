@@ -1,7 +1,7 @@
 package com.caved_in.dynamicquests.events;
 
-import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestHandler;
-import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestType;
+import com.caved_in.dynamicquests.dynamicquests.DynamicQuestHandler;
+import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

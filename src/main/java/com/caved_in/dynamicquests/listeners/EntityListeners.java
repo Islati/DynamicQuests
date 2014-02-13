@@ -1,11 +1,11 @@
 package com.caved_in.dynamicquests.listeners;
 
 import com.caved_in.dynamicquests.DynamicQuests;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobKillQuest;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.QuestProgress;
-import com.caved_in.dynamicquests.handlers.player.PlayerHandler;
-import com.caved_in.dynamicquests.handlers.player.QuestPlayer;
-import com.caved_in.dynamicquests.handlers.utility.CommonUtils;
+import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.QuestProgress;
+import com.caved_in.dynamicquests.player.PlayerHandler;
+import com.caved_in.dynamicquests.player.QuestPlayer;
+import com.caved_in.dynamicquests.utility.CommonUtils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

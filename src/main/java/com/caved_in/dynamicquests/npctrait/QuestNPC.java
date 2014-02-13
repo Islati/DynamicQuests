@@ -1,14 +1,14 @@
 package com.caved_in.dynamicquests.npctrait;
 
-import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestHandler;
-import com.caved_in.dynamicquests.handlers.dynamicquests.DynamicQuestType;
-import com.caved_in.dynamicquests.handlers.dynamicquests.QuestGenerator;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.CollectQuest;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobKillQuest;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobQuestTier;
-import com.caved_in.dynamicquests.handlers.player.PlayerHandler;
-import com.caved_in.dynamicquests.handlers.player.QuestPlayer;
-import com.caved_in.dynamicquests.handlers.utility.CommonUtils;
+import com.caved_in.dynamicquests.dynamicquests.DynamicQuestHandler;
+import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
+import com.caved_in.dynamicquests.dynamicquests.QuestGenerator;
+import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.MobQuestTier;
+import com.caved_in.dynamicquests.player.PlayerHandler;
+import com.caved_in.dynamicquests.player.QuestPlayer;
+import com.caved_in.dynamicquests.utility.CommonUtils;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
