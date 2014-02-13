@@ -1,11 +1,11 @@
-package com.caved_in.dynamicquests.handlers.dynamicquests;
+package com.caved_in.dynamicquests.dynamicquests;
 
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.CollectQuest;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.DeliverQuest;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobKillQuest;
-import com.caved_in.dynamicquests.handlers.dynamicquests.quests.interfaces.IDynamicQuest;
-import com.caved_in.dynamicquests.handlers.material.QuestItemRequirementWrapper;
-import com.caved_in.dynamicquests.handlers.material.QuestMaterial;
+import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.DeliverQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.interfaces.IDynamicQuest;
+import com.caved_in.dynamicquests.material.QuestItemRequirementWrapper;
+import com.caved_in.dynamicquests.material.QuestMaterial;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

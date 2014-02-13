@@ -1,5 +1,6 @@
 package com.caved_in.dynamicquests.player;
 
+
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestHandler;
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
 import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
@@ -126,9 +127,7 @@ public class QuestPlayer {
 	public List<CollectQuest> getActiveCollectionQuests() {
 		List<CollectQuest> collectQuests = new ArrayList<>();
 		for (UUID questID : getQuestIds()) {
-			if (DynamicQuestHandler.getQuestType(questID) == DynamicQuestType.GATHER_MATERIAL) {
-				collectQuests.add(DynamicQuestHandler.getCollectQuest(questID));
-			}
+
 		}
 		return collectQuests;
 	}

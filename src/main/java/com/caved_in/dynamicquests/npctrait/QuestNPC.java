@@ -2,7 +2,6 @@ package com.caved_in.dynamicquests.npctrait;
 
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestHandler;
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
-import com.caved_in.dynamicquests.dynamicquests.QuestGenerator;
 import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobQuestTier;
