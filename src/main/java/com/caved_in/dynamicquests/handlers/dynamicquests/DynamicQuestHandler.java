@@ -3,6 +3,7 @@ package com.caved_in.dynamicquests.handlers.dynamicquests;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.DeliverQuest;
 import com.caved_in.dynamicquests.handlers.dynamicquests.quests.MobKillQuest;
+import com.caved_in.dynamicquests.handlers.dynamicquests.quests.interfaces.IDynamicQuest;
 import com.caved_in.dynamicquests.handlers.material.QuestItemRequirementWrapper;
 import com.caved_in.dynamicquests.handlers.material.QuestMaterial;
 import net.citizensnpcs.api.npc.NPC;
@@ -15,37 +16,49 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DynamicQuestHandler {
+	private static Map<UUID, IDynamicQuest> activeQuests = new HashMap<>();
+
 	private static Map<UUID, DynamicQuestType> activeQuestTypes = new HashMap<UUID, DynamicQuestType>();
 	private static Map<UUID, DeliverQuest> activeDeliveryQuests = new HashMap<UUID, DeliverQuest>();
 	private static Map<UUID, MobKillQuest> activeMobKillQuests = new HashMap<UUID, MobKillQuest>();
 	private static Map<UUID, CollectQuest> activeCollectQuests = new HashMap<UUID, CollectQuest>();
+
+	//Map of all the quests assigned to NPC's
 	private static Map<Integer, UUID> questsAssigned = new HashMap<>();
 
 	public static boolean isNpcInUse(int npcID) {
 		return questsAssigned.containsKey(npcID);
 	}
 
-	public static UUID getQuestIDForNPC(int npcID) {
-		if (isNpcInUse(npcID)) {
-			return questsAssigned.get(npcID);
-		}
-		return null;
+	public static IDynamicQuest getQuestForNpc(NPC npc) {
+		return getQuestForNPC(npc.getId());
 	}
 
-	public static UUID getQuestIDForNPC(NPC npc) {
-		return getQuestIDForNPC(npc.getId());
+	public static IDynamicQuest getQuestForNPC(int npcID) {
+		//Get the active quest with the UUID that's been assigned to the requested NPC
+		return activeQuests.get(questsAssigned.get(npcID));
 	}
 
+	public static IDynamicQuest getQuest(UUID questID) {
+		return activeQuests.get(questID);
+	}
+
+	/**
+	 * Get the Type of the quest for the given questID
+	 *
+	 * @param questID
+	 * @return The quests type if the quest if an active quest, otherwise the type NO_QUEST
+	 */
 	public static DynamicQuestType getQuestType(UUID questID) {
 		if (isActiveQuest(questID)) {
-			return activeQuestTypes.get(questID);
+			return activeQuests.get(questID).getQuestType();
 		}
 		return DynamicQuestType.NO_QUEST;
 	}
 
 	public static DeliverQuest getDeliverQuest(UUID questID) {
-		if (isActiveQuest(DynamicQuestType.DELIVER_GOODS, questID)) {
-			return activeDeliveryQuests.get(questID);
+		if (getQuestType(questID) == DynamicQuestType.DELIVER_GOODS) {
+			return (DeliverQuest)getQuest(questID);
 		}
 		return null;
 	}
@@ -65,27 +78,24 @@ public class DynamicQuestHandler {
 	}
 
 	public static boolean isActiveQuest(DynamicQuestType questType, UUID questID) {
-		switch (questType) {
-
-			case KILL_MOB:
-				return activeMobKillQuests.containsKey(questID);
-			case DELIVER_GOODS:
-				return activeDeliveryQuests.containsKey(questID);
-			case REACH_LOCATION:
-				return false;
-			case KILL_PLAYER:
-				return false;
-			case GATHER_MATERIAL:
-				return activeCollectQuests.containsKey(questID);
-			case NO_QUEST:
-				return false;
-			default:
-				return false;
+		//Check that the quest UUID given is active
+		if (activeQuests.containsKey(questID)) {
+			//Check that the quest with the given UUID is of the active type.
+			return activeQuests.get(questID).getQuestType() == questType;
+		} else {
+			//The quest ID given isn't an active quest.
+			return false;
 		}
 	}
 
 	public static boolean isActiveQuest(UUID uniqueID) {
-		return activeQuestTypes.containsKey(uniqueID);
+		return activeQuests.containsKey(uniqueID);
+	}
+
+	public static void addQuest(IDynamicQuest quest) {
+		UUID questID = quest.getQuestID();
+		activeQuests.put(questID, quest);
+		questsAssigned.put(quest.getQuestBeginNpc(), questID);
 	}
 
 	public static void addDeliverQuest(DeliverQuest deliverQuest) {
@@ -158,33 +168,35 @@ public class DynamicQuestHandler {
 
 			//Make sure we have the materials
 			if (questWrapper != null) {
-				int playerMaterialAmount = 0; //How many of the required items the player has
-				int itemRemainder = 0; //How many, if any, we should give back
-				int questRequiredAmount = questWrapper.getQuestMaterialAmount(); //The amount of items required by the
-				// quest
-				MaterialData questMaterial = questWrapper.getQuestMaterial(); //The material required by the quest
+				//How many of the required items the player has
+				int playerMaterialAmount = 0;
+				//How many, if any, we should give back
+				int itemRemainder = 0;
+				//The amount of items required by the quest
+				int questRequiredAmount = questWrapper.getQuestMaterialAmount();
+				//The material required by the quest
+				MaterialData questMaterial = questWrapper.getQuestMaterial();
 
-				Map<Integer, ? extends ItemStack> playerItems = player.getInventory().all(questMaterial.getItemType())
-						; //Get all the items in the players inventory required by the quest
+				//Get all the items in the players inventory required by the quest
+				Map<Integer, ? extends ItemStack> playerItems = player.getInventory().all(questMaterial.getItemType());
 
-				Map<Integer, ItemStack> itemStacksToRemove = new HashMap<>(); //Map of ONLY the items we want to pass
-				// to the requirements wrapper
-
+				//Map of ONLY the items we want to pass to the requirements wrapper
+				Map<Integer, ItemStack> itemStacksToRemove = new HashMap<>();
 
 				for (Map.Entry<Integer, ? extends ItemStack> inventoryItem : playerItems.entrySet()) {
-					ItemStack itemStack = inventoryItem.getValue(); //Get the actual itemstack
-					if (playerMaterialAmount < questRequiredAmount) //If they don't already have the required materials
-					{
-						if ((byte) itemStack.getDurability() == questMaterial.getData()) //Check the durability on the
-						// item
-						{
+					//Get the actual itemstack
+					ItemStack itemStack = inventoryItem.getValue();
+					//If they don't already have the required materials
+					if (playerMaterialAmount < questRequiredAmount) {
+						//Check the durability on the item
+						if ((byte) itemStack.getDurability() == questMaterial.getData()) {
 							playerMaterialAmount += itemStack.getAmount();
 							itemStacksToRemove.put(inventoryItem.getKey(), inventoryItem.getValue());
 						}
 					} else {
+						//Set the item remainder incase we need to give items back to the player
 						itemRemainder = (playerMaterialAmount > questRequiredAmount ? playerMaterialAmount -
-								questRequiredAmount : 0); //Set the item remainder incase we need to give items back
-								// to the player
+								questRequiredAmount : 0);
 						break;
 					}
 					questRequirementWrapper = new QuestItemRequirementWrapper(playerMaterialAmount,

@@ -9,10 +9,16 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DynamicQuests extends JavaPlugin {
+	private static DynamicQuests dynamicQuests = null;
+
 	@Override
 	public void onEnable() {
-		traitRegister(); //Register the NPC traits for this plugin;
-		registerListeners(); //Register the listeners for this plugin
+		//Register the NPC traits for this plugin;
+		traitRegister();
+		//Register the listeners for this plugin
+		registerListeners();
+		//Create the singleton instance of our dynamic events plugin
+		dynamicQuests = getDynamicEventPlugin();
 	}
 
 	private void traitRegister() {
@@ -29,6 +35,9 @@ public class DynamicQuests extends JavaPlugin {
 	}
 
 	public static DynamicQuests getDynamicEventPlugin() {
-		return (DynamicQuests) Bukkit.getPluginManager().getPlugin("DynamicEvents");
+		if (dynamicQuests == null) {
+			dynamicQuests = (DynamicQuests) Bukkit.getPluginManager().getPlugin("DynamicEvents");
+		}
+		return dynamicQuests;
 	}
 }
