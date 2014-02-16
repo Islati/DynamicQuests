@@ -14,7 +14,7 @@ public class MetadataHandler {
 	}
 
 	public static void setMetaData(Metadatable metadatable, QuestMetadata metadata, Object value) {
-		metadatable.setMetadata(metadata.getKey(), new FixedMetadataValue(DynamicQuests.getDynamicEventPlugin(),
+		metadatable.setMetadata(metadata.getKey(), new FixedMetadataValue(DynamicQuests.getPlugin(),
 				value));
 	}
 }

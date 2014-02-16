@@ -3,7 +3,7 @@ package com.caved_in.dynamicquests.dynamicquests;
 import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.DeliverQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
-import com.caved_in.dynamicquests.dynamicquests.quests.interfaces.IDynamicQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.IDynamicQuest;
 import com.caved_in.dynamicquests.material.QuestItemRequirementWrapper;
 import com.caved_in.dynamicquests.material.QuestMaterial;
 import net.citizensnpcs.api.npc.NPC;
@@ -57,8 +57,9 @@ public class DynamicQuestHandler {
 	}
 
 	public static DeliverQuest getDeliverQuest(UUID questID) {
-		if (getQuestType(questID) == DynamicQuestType.DELIVER_GOODS) {
-			return (DeliverQuest)getQuest(questID);
+        IDynamicQuest quest = getQuest(questID);
+		if (quest.getQuestType() == DynamicQuestType.DELIVER_GOODS) {
+			return (DeliverQuest)quest;
 		}
 		return null;
 	}
@@ -96,24 +97,6 @@ public class DynamicQuestHandler {
 		UUID questID = quest.getQuestID();
 		activeQuests.put(questID, quest);
 		questsAssigned.put(quest.getQuestBeginNpc(), questID);
-	}
-
-	public static void addDeliverQuest(DeliverQuest deliverQuest) {
-		activeQuestTypes.put(deliverQuest.getQuestID(), deliverQuest.getQuestType());
-		activeDeliveryQuests.put(deliverQuest.getQuestID(), deliverQuest);
-		questsAssigned.put(deliverQuest.getQuestBeginNpc(), deliverQuest.getQuestID());
-	}
-
-	public static void addMobKillQuest(MobKillQuest killQuest) {
-		activeQuestTypes.put(killQuest.getQuestID(), killQuest.getQuestType());
-		activeMobKillQuests.put(killQuest.getQuestID(), killQuest);
-		questsAssigned.put(killQuest.getQuestBeginNpc(), killQuest.getQuestID());
-	}
-
-	public static void addCollectQuest(CollectQuest collectQuest) {
-		activeQuestTypes.put(collectQuest.getQuestID(), collectQuest.getQuestType());
-		activeCollectQuests.put(collectQuest.getQuestID(), collectQuest);
-		questsAssigned.put(collectQuest.getQuestBeginNpc(), collectQuest.getQuestID());
 	}
 
 	/**

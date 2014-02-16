@@ -1,13 +1,13 @@
 package com.caved_in.dynamicquests.dynamicquests;
 
 
+import com.caved_in.commons.utilities.NumberUtil;
 import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobQuestTier;
 import com.caved_in.dynamicquests.entity.QuestEntityWrapper;
 import com.caved_in.dynamicquests.material.QuestMaterial;
 import com.caved_in.dynamicquests.material.QuestMaterialType;
-import com.caved_in.dynamicquests.utility.NumberUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.material.MaterialData;
@@ -207,7 +207,7 @@ public class QuestGenerator {
 	private static QuestEntityWrapper getRandomQuestEntity(List<QuestEntityWrapper> questEntities) {
 		QuestEntityWrapper questEntity = questEntities.get(new Random().nextInt(questEntities.size()));
 		questEntity.setEntityAmount(NumberUtil.getRandomInRange(questEntity.getEntityAmount() / 2,
-				questEntity.getEntityAmount()));
+                questEntity.getEntityAmount()));
 		return questEntity;
 	}
 
@@ -227,14 +227,18 @@ public class QuestGenerator {
 	}
 
 	public static MobKillQuest generateMobKillQuest(int questHolderNPC) {
-		MobKillQuest mobKillQuest = new MobKillQuest(UUID.randomUUID(), questHolderNPC);
+		MobKillQuest mobKillQuest = new MobKillQuest(getUUID(), questHolderNPC);
 		mobKillQuest.setEntityWrapper(getRandomQuestEntity(MobQuestTier.EASY));
 		return mobKillQuest;
 	}
 
 	public static MobKillQuest generateMobKillQuest(int questHolderNPC, MobQuestTier questTier) {
-		MobKillQuest mobKillQuest = new MobKillQuest(UUID.randomUUID(), questHolderNPC);
+		MobKillQuest mobKillQuest = new MobKillQuest(getUUID(), questHolderNPC);
 		mobKillQuest.setEntityWrapper(getRandomQuestEntity(questTier));
 		return mobKillQuest;
 	}
+
+    private static UUID getUUID() {
+        return UUID.randomUUID();
+    }
 }

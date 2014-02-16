@@ -6,7 +6,7 @@ import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
 import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.QuestProgress;
-import com.caved_in.dynamicquests.dynamicquests.quests.interfaces.IDynamicQuest;
+import com.caved_in.dynamicquests.dynamicquests.quests.IDynamicQuest;
 import org.bukkit.entity.EntityType;
 
 import java.util.*;

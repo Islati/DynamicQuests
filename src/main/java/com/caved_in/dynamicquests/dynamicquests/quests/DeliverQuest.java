@@ -1,7 +1,6 @@
 package com.caved_in.dynamicquests.dynamicquests.quests;
 
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
-import com.caved_in.dynamicquests.dynamicquests.quests.interfaces.IMaterialQuest;
 import com.caved_in.dynamicquests.material.QuestMaterial;
 
 import java.util.UUID;

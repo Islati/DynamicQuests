@@ -1,4 +1,4 @@
-package com.caved_in.dynamicquests.dynamicquests.quests.interfaces;
+package com.caved_in.dynamicquests.dynamicquests.quests;
 
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
 

@@ -37,10 +37,6 @@ public class XmlLocation {
 		this.locationRadius = locationRadius;
 	}
 
-	public XmlLocation() {
-
-	}
-
 	public double getX() {
 		return X;
 	}

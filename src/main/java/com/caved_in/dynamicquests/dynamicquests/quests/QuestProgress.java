@@ -22,16 +22,14 @@ public class QuestProgress {
 				this.amountRequired = DynamicQuestHandler.getMobKillQuest(questID).getEntityData().getEntityAmount();
 				break;
 			case DELIVER_GOODS:
-				this.amountRequired = DynamicQuestHandler.getDeliverQuest(questID).getQuestMaterial()
-						.getQuestMaterialAmount();
+				this.amountRequired = DynamicQuestHandler.getDeliverQuest(questID).getQuestMaterial().getQuestMaterialAmount();
 				break;
 			case REACH_LOCATION:
 				break;
 			case KILL_PLAYER:
 				break;
 			case GATHER_MATERIAL:
-				this.amountRequired = DynamicQuestHandler.getCollectQuest(questID).getQuestMaterial()
-						.getQuestMaterialAmount();
+				this.amountRequired = DynamicQuestHandler.getCollectQuest(questID).getQuestMaterial().getQuestMaterialAmount();
 				break;
 			case NO_QUEST:
 				break;

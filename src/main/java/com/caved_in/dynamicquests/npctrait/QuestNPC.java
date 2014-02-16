@@ -1,13 +1,14 @@
 package com.caved_in.dynamicquests.npctrait;
 
+import com.caved_in.commons.Commons;
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestHandler;
 import com.caved_in.dynamicquests.dynamicquests.DynamicQuestType;
+import com.caved_in.dynamicquests.dynamicquests.QuestGenerator;
 import com.caved_in.dynamicquests.dynamicquests.quests.CollectQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobKillQuest;
 import com.caved_in.dynamicquests.dynamicquests.quests.MobQuestTier;
 import com.caved_in.dynamicquests.player.PlayerHandler;
 import com.caved_in.dynamicquests.player.QuestPlayer;
-import com.caved_in.dynamicquests.utility.CommonUtils;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
@@ -35,19 +36,19 @@ public class QuestNPC extends Trait {
 			if (questTypeNumber >= 0 && questTypeNumber <= 49) //Make Collection Quest
 			{
 				CollectQuest collectQuest = QuestGenerator.generateCollectQuest(this.getNPC().getId());
-				CommonUtils.messageCosole(String.format("Collection quest for %s, NPCID[%s], " +
+                Commons.messageConsole(String.format("Collection quest for %s, NPCID[%s], " +
 						"with quest ID[%s] requiring %s of %s", npc.getName(), npc.getId(), collectQuest.getQuestID(),
 						collectQuest.getQuestMaterial().getQuestMaterialAmount(), collectQuest.getQuestMaterial()
 						.getQuestMaterial().getItemType().name()));
-				DynamicQuestHandler.addCollectQuest(collectQuest);
+				DynamicQuestHandler.addQuest(collectQuest);
 			} else if (questTypeNumber >= 49 && questTypeNumber <= 99) //Make Mob-Kill quest
 			{
 				MobKillQuest mobKillQuest = QuestGenerator.generateMobKillQuest(this.getNPC().getId(),
 						MobQuestTier.MEDIUM);
-				CommonUtils.messageCosole(String.format("Medium Hunting Quest generated for NPC %s requring %s kills " +
+				Commons.messageConsole(String.format("Medium Hunting Quest generated for NPC %s requring %s kills " +
 						"of %s", npc.getName() + "/" + npc.getId(), mobKillQuest.getEntityData().getEntityAmount(),
 						mobKillQuest.getEntityData().getEntityType().name()));
-				DynamicQuestHandler.addMobKillQuest(mobKillQuest);
+				DynamicQuestHandler.addQuest(mobKillQuest);
 			}
 		}
 	}
@@ -56,9 +57,9 @@ public class QuestNPC extends Trait {
 	public void onNpcRightClick(NPCRightClickEvent event) {
 		if (event.getNPC() == this.getNPC()) //Make sure we're only handling for the npc that was clicked.
 		{
-			CommonUtils.messageCosole("Is the same npc...");
+            Commons.messageConsole("Is the same npc...");
 			Player player = event.getClicker();
-			UUID questForNpc = DynamicQuestHandler.getQuestIDForNPC(event.getNPC()); //Get the quest ID for this NPC
+			UUID questForNpc = DynamicQuestHandler.getQuestForNpc(event.getNPC()).getQuestID(); //Get the quest ID for this NPC
 			DynamicQuestType questType = DynamicQuestHandler.getQuestType(questForNpc); //Get questType for the npc's
 			// quest
 			if (player.getGameMode() != GameMode.CREATIVE) {
@@ -96,7 +97,7 @@ public class QuestNPC extends Trait {
 			}
 
 		} else {
-			CommonUtils.messageCosole("Not the same npc? " + event.getNPC().getId() + "/ " + this.getNPC().getId());
+            Commons.messageConsole("Not the same npc? " + event.getNPC().getId() + "/ " + this.getNPC().getId());
 		}
 	}
 }
